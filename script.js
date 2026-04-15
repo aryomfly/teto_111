@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hero.classList.add('music-on');
         document.body.classList.remove('site-glitch');
         vinyl.classList.remove('glitch');
-        rainInterval = setInterval(createRainDrop, 60);
+        rainInterval = setInterval(createRainDrop, window.innerWidth < 768 ? 120 : 60);
         glitchInterval = setInterval(() => {
             if (Math.random() < 0.1) {
                 triggerGlitch();
