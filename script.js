@@ -128,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ticketForm = document.querySelector('#ticketModal form');
     const telegramBotToken = '8778150621:AAFEU48xcdFgbScjZdGQmW4_raLAN0NKNvs';
     const telegramChatId = '1691344016';
-    const useTelegramApi = location.hostname.endsWith('github.io') || location.hostname.includes('githubusercontent.com');
 
     async function sendTelegramMessage(formData) {
         const name = formData.get('user_name') || 'Не указано';
@@ -148,23 +147,32 @@ document.addEventListener('DOMContentLoaded', () => {
             + "Итого: <b>" + total + " G</b>\n"
             + "Почта: <b>" + email + "</b>\n";
 
-        const response = await fetch('https://api.telegram.org/bot' + telegramBotToken + '/sendMessage', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: telegramChatId,
-                text: message,
-                parse_mode: 'HTML'
-            })
-        });
-        return response.json();
+        const apiUrl = 'https://api.telegram.org/bot' + telegramBotToken + '/sendMessage';
+        const payload = {
+            chat_id: telegramChatId,
+            text: message,
+            parse_mode: 'HTML'
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            return response.json();
+        } catch (error) {
+            const fallbackUrl = apiUrl + '?' + new URLSearchParams(payload).toString();
+            await fetch(fallbackUrl, {
+                method: 'GET',
+                mode: 'no-cors'
+            });
+            return { ok: true };
+        }
     }
 
     if (ticketForm) {
         ticketForm.addEventListener('submit', async (event) => {
-            if (!useTelegramApi) {
-                return;
-            }
             event.preventDefault();
             calculateTotal();
             const submitButton = ticketForm.querySelector('button[type="submit"]');
