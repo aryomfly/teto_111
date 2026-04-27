@@ -6,6 +6,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $seat_type = htmlspecialchars($_POST['seat_type']);
     $qty = intval($_POST['quantity']);
     
+    if (!function_exists('curl_init')) {
+        echo "<p>Ошибка сервера: расширение PHP cURL не включено. Установите cURL или используйте PHP-хостинг.</p>";
+        exit;
+    }
+
     // Расчет цены
     $price = 500;
     if ($seat_type == "Balcony") $price = 300;

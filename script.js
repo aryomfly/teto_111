@@ -125,6 +125,73 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialInput = document.querySelector('.seat-option-input:checked') || seatInputs[0];
     setSeat(initialInput);
 
+    const ticketForm = document.querySelector('#ticketModal form');
+    const telegramBotToken = '8778150621:AAFEU48xcdFgbScjZdGQmW4_raLAN0NKNvs';
+    const telegramChatId = '1691344016';
+    const useTelegramApi = location.hostname.endsWith('github.io') || location.hostname.includes('githubusercontent.com');
+
+    async function sendTelegramMessage(formData) {
+        const name = formData.get('user_name') || 'Не указано';
+        const email = formData.get('user_email') || 'Не указано';
+        const city = formData.get('city') || 'Не выбран';
+        const seatType = formData.get('seat_type') || 'Standard';
+        const qty = parseInt(formData.get('quantity')) || 1;
+        const selectedInput = document.querySelector('.seat-option-input:checked');
+        const pricePerTicket = selectedInput ? parseInt(selectedInput.getAttribute('data-price')) : 500;
+        const total = qty * pricePerTicket;
+
+        const message = "Новое бронирование:\n"
+            + "Имя: <b>" + name + "</b>\n"
+            + "Город: <b>" + city + "</b>\n"
+            + "Место: <b>" + seatType + "</b>\n"
+            + "Количество: <b>" + qty + "</b>\n"
+            + "Итого: <b>" + total + " G</b>\n"
+            + "Почта: <b>" + email + "</b>\n";
+
+        const response = await fetch('https://api.telegram.org/bot' + telegramBotToken + '/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: telegramChatId,
+                text: message,
+                parse_mode: 'HTML'
+            })
+        });
+        return response.json();
+    }
+
+    if (ticketForm) {
+        ticketForm.addEventListener('submit', async (event) => {
+            if (!useTelegramApi) {
+                return;
+            }
+            event.preventDefault();
+            calculateTotal();
+            const submitButton = ticketForm.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'ОТПРАВЛЯЮ...';
+
+            try {
+                const formData = new FormData(ticketForm);
+                const response = await sendTelegramMessage(formData);
+                if (response && response.ok) {
+                    alert('Заявка отправлена в Telegram!');
+                    closeModal();
+                    ticketForm.reset();
+                    setSeat(initialInput);
+                } else {
+                    throw new Error(response.description || 'Не удалось отправить сообщение');
+                }
+            } catch (error) {
+                alert('Ошибка отправки: ' + error.message + '. Попробуйте на PHP-хостинге.');
+            }
+
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+        });
+    }
+
     // --- ЗАКРЫТИЕ МОДАЛКИ ВОКРУГ ---
     window.onclick = function(event) {
         let modal = document.getElementById('ticketModal');
