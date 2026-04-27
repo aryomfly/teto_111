@@ -202,13 +202,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ЗАКРЫТИЕ МОДАЛКИ ВОКРУГ ---
     window.onclick = function(event) {
-        let modal = document.getElementById('ticketModal');
-        if (event.target == modal) { closeModal(); }
+        let ticketModal = document.getElementById('ticketModal');
+        let imageModal = document.getElementById('imageModal');
+        if (event.target == ticketModal) { closeModal(); }
+        if (event.target == imageModal) { closeImageModal(); }
     }
+
+    // --- ОБРАБОТЧИКИ ДЛЯ ГАЛЕРЕИ ---
+    const photoCards = document.querySelectorAll('.photo-card img');
+    photoCards.forEach(img => {
+        img.addEventListener('click', function() {
+            openImageModal(this.src);
+        });
+    });
 });
 
 function openModal() { document.getElementById('ticketModal').style.display = 'block'; }
 function closeModal() { document.getElementById('ticketModal').style.display = 'none'; }
+
+function openImageModal(src) {
+    const modal = document.getElementById('imageModal');
+    const img = document.getElementById('modalImage');
+    img.src = src;
+    modal.style.display = 'block';
+}
+
+function closeImageModal() {
+    document.getElementById('imageModal').style.display = 'none';
+}
+
 function selectCity(cityName) {
     document.getElementById('selected-city-display').innerHTML = "ГОРОД: " + cityName.toUpperCase();
     document.getElementById('city-input').value = cityName;
