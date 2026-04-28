@@ -25,15 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startRain() {
         if (rainInterval) return;
+        // На мобилях (< 768px) отключаем дождь для производительности
+        const isMobile = window.innerWidth < 768;
         hero.classList.add('music-on');
         document.body.classList.remove('site-glitch');
         vinyl.classList.remove('glitch');
-        rainInterval = setInterval(createRainDrop, window.innerWidth < 768 ? 200 : 100);
-        glitchInterval = setInterval(() => {
-            if (Math.random() < 0.05) {
-                triggerGlitch();
-            }
-        }, 5000);
+        if (!isMobile) {
+            rainInterval = setInterval(createRainDrop, 100);
+            glitchInterval = setInterval(() => {
+                if (Math.random() < 0.05) {
+                    triggerGlitch();
+                }
+            }, 5000);
+        }
     }
 
     function stopRain() {

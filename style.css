@@ -345,9 +345,15 @@ nav a:hover::after { width: 100%; }
 }
 .grey-bg { 
     background-color: #111; 
-    background-image: radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
-                      radial-gradient(circle at 75% 75%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
 }
+
+@media (min-width: 1200px) {
+    .grey-bg {
+        background-image: radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+                          radial-gradient(circle at 75% 75%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+    }
+}
+
 h2 { 
     font-size: 2.7rem; 
     border-bottom: 2px dashed #fff; 
@@ -576,8 +582,8 @@ h2 {
 @media (max-width: 480px) {
     .modal-content {
         width: 98%;
-        margin: 25% auto 10%;
-        max-height: 80vh;
+        margin: 5% auto 10%;
+        max-height: 85vh;
     }
     
     .pixel-form {
@@ -612,6 +618,13 @@ h2 {
 #selected-city-display { color: #ffcc00; font-weight: bold; text-align: center; margin-bottom: 20px; }
 
 footer { text-align: center; padding: 30px; border-top: 4px solid #333; font-size: 0.9rem; }
+
+@media (max-width: 360px) {
+    .modal-content {
+        margin: 1% auto 5% !important;
+    }
+}
+
 /* ... (Базовые настройки, навигация, кнопки остаются прежними) ... */
 
 /* ГЛАВНЫЙ ЭКРАН И ПЛАСТИНКА 10000% COOLNESS */
@@ -638,31 +651,48 @@ footer { text-align: center; padding: 30px; border-top: 4px solid #333; font-siz
 }
 .hero::before {
     left: 0;
-    background: radial-gradient(circle at top left, rgba(255, 0, 255, 0.25), transparent 55%);
 }
+
 .hero::after {
     right: 0;
-    background: radial-gradient(circle at top right, rgba(0, 255, 255, 0.2), transparent 55%);
+}
+
+@media (min-width: 1200px) {
+    .hero::before {
+        background: radial-gradient(circle at top left, rgba(255, 0, 255, 0.25), transparent 55%);
+    }
+    
+    .hero::after {
+        background: radial-gradient(circle at top right, rgba(0, 255, 255, 0.2), transparent 55%);
+    }
 }
 .hero.music-on::before,
 .hero.music-on::after {
     opacity: 1;
 }
-.hero.music-on .vinyl {
-    box-shadow: 0 0 80px rgba(255, 0, 255, 0.35), 0 0 60px rgba(0, 255, 255, 0.2);
+
+@media (min-width: 1200px) {
+    .hero.music-on .vinyl {
+        box-shadow: 0 0 80px rgba(255, 0, 255, 0.35), 0 0 60px rgba(0, 255, 255, 0.2);
+    }
+    
+    .vinyl.glitch {
+        animation: rotateVinyl 0.15s linear infinite, vinylShake 0.12s ease-in-out 0s 4;
+    }
 }
-.vinyl.glitch {
-    animation: rotateVinyl 0.15s linear infinite, rainbowGlow 8s linear infinite, vinylShake 0.12s ease-in-out 0s 4;
-    transform: translateX(0);
-}
-.vinyl.glitch::before {
-    opacity: 0.3;
-}
-.site-glitch {
-    animation: screenFlicker 0.3s linear 0s 2;
-}
-.site-glitch * {
-    text-shadow: 0 0 12px rgba(255, 0, 255, 0.35), 0 0 18px rgba(0, 255, 255, 0.18);
+
+@media (max-width: 768px) {
+    .vinyl.glitch {
+        animation: none !important;
+    }
+    
+    .site-glitch {
+        animation: none !important;
+    }
+    
+    .site-glitch * {
+        text-shadow: none !important;
+    }
 }
 .rain-layer {
     position: fixed;
@@ -678,10 +708,14 @@ footer { text-align: center; padding: 30px; border-top: 4px solid #333; font-siz
     height: 18px;
     background: rgba(255, 255, 255, 0.85);
     border-radius: 50%;
-    filter: blur(1px);
-    filter: blur(0.8px);
     opacity: 0.85;
     animation: rainFall linear forwards;
+}
+
+@media (max-width: 768px) {
+    .rain-drop {
+        display: none !important;
+    }
 }
 @keyframes rainFall {
     to { transform: translateY(110vh); opacity: 0; }
@@ -739,7 +773,12 @@ footer { text-align: center; padding: 30px; border-top: 4px solid #333; font-siz
     position: relative;
     margin-bottom: 20px;
     perspective: 1500px;
-    filter: drop-shadow(0 0 60px rgba(255, 0, 255, 0.5)) drop-shadow(0 0 100px rgba(0, 255, 255, 0.3));
+}
+
+@media (min-width: 1200px) {
+    .vinyl-wrapper {
+        filter: drop-shadow(0 0 60px rgba(255, 0, 255, 0.5)) drop-shadow(0 0 100px rgba(0, 255, 255, 0.3));
+    }
 }
 
 .vinyl-wrapper::after {
@@ -747,7 +786,11 @@ footer { text-align: center; padding: 30px; border-top: 4px solid #333; font-siz
     position: absolute;
     inset: -80px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 0, 255, 0.4) 0%, rgba(0, 255, 255, 0.2) 30%, transparent 70%);
+}
+
+@media (min-width: 1200px) {
+    .vinyl-wrapper::after {
+        background: radial-gradient(circle, rgba(255, 0, 255, 0.4) 0%, rgba(0, 255, 255, 0.2) 30%, transparent 70%);
     animation: megaAuraGlow 4s ease-in-out infinite;
     z-index: -1;
 }
