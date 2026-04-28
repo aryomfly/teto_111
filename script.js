@@ -28,12 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         hero.classList.add('music-on');
         document.body.classList.remove('site-glitch');
         vinyl.classList.remove('glitch');
-        rainInterval = setInterval(createRainDrop, window.innerWidth < 768 ? 120 : 60);
+        rainInterval = setInterval(createRainDrop, window.innerWidth < 768 ? 200 : 100);
         glitchInterval = setInterval(() => {
-            if (Math.random() < 0.1) {
+            if (Math.random() < 0.05) {
                 triggerGlitch();
             }
-        }, 3000);
+        }, 5000);
     }
 
     function stopRain() {
